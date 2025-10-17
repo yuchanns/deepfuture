@@ -8,6 +8,8 @@ setting :
 			font : "Yuanti SC"
 		linux :
 			font : "WenQuanYi Micro Hei"
+		wasm :
+			font : "WenQuanYi Micro Hei"
 		timefmt : "%Y/%m/%d %H:%M"
 		homepage : "https://blog.codingnow.com/2025/07/deep_future.html"
 	english:
@@ -18,5 +20,7 @@ setting :
 			font : Arial
 		linux :
 			font : "Noto Sans"
+		wasm :
+			font : Arial
 		timefmt : "%b %d, %Y %H:%M"
 		homepage : "https://boardgamegeek.com/boardgame/194986/deep-future"
