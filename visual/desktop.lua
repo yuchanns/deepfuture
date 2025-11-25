@@ -24,6 +24,7 @@ local DESC
 local VTIPS = {}
 local FONT_ID
 local SPRITES
+local VIEWPORT
 
 local M = {}
 
@@ -443,6 +444,9 @@ setmetatable(focus_map, { __index = function (o,k)
 end })
 
 function M.draw(count)
+	if VIEWPORT then
+		VIEWPORT:begin_draw()
+	end
 	if CAMERA then open_camera() end
 	-- todo : find a better place to check unfocus :
 	--		code trigger unfocus, rather than mouse move
@@ -453,13 +457,16 @@ function M.draw(count)
 	-- todo : support multiple hud layer
 	local r = mouse.focus_region()
 	widget.draw(BATCH, DRAWLIST.hud, r and focus_map[r])
-	
+
 	if CAMERA then close_camera() end
 	if DESC then
 		widget.draw(BATCH, DRAWLIST.describe)
 	end
 	if ADDITIONAL_LIST then
 		draw_additional()
+	end
+	if VIEWPORT then
+		VIEWPORT:end_draw()
 	end
 end
 
@@ -578,6 +585,7 @@ function M.init(args)
 	BATCH = args.batch
 	FONT_ID = args.font_id
 	SPRITES = args.sprites
+	VIEWPORT = args.viewport
 	local width = args.width
 	local height = args.height
 	function update_draw_list(w, h)
@@ -599,7 +607,7 @@ function M.init(args)
 	}
 	vtrack.register(d)
 	vmap.register(d)
-	
+
 	TESTLIST.desc = widget.test_list("describe", test)
 	update_draw_list()
 	update_test_list()

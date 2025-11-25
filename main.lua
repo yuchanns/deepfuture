@@ -21,6 +21,7 @@ local text = require "soluna.text"
 local setting =require "core.setting"
 local image = require "soluna.image"
 local file = require "soluna.file"
+local viewport = require "core.viewport"
 
 local utf8 = utf8
 local math = math
@@ -57,12 +58,15 @@ do
 	}
 end
 
+viewport.init(args.batch, args.width, args.height)
+
 vdesktop.init {
 	batch = args.batch,
 	font_id = language.font_id(LANG),
 	sprites = soluna.load_sprites "asset/sprites.dl",
 	width = args.width,
 	height = args.height,
+	viewport = viewport,
 }
 
 local game = {}
@@ -135,8 +139,12 @@ end
 
 run_game()
 
-callback.window_resize = vdesktop.flush
+function callback.window_resize(w, h)
+	viewport:resize(w, h)
+end
+
 function callback.mouse_move(x, y)
+	x, y = viewport:screen_to_world(x, y)
 	mouse.mouse_move(x, y)
 end
 
@@ -157,14 +165,17 @@ function callback.mouse_scroll(x, y)
 end
 
 function callback.touch_begin(x, y)
+	x, y = viewport:screen_to_world(x, y)
 	touch.begin(x, y)
 end
 
 function callback.touch_end(x, y)
+	x, y = viewport:screen_to_world(x, y)
 	touch.ended(x, y)
 end
 
 function callback.touch_moved(x, y)
+	x, y = viewport:screen_to_world(x, y)
 	touch.moved(x, y)
 end
 
